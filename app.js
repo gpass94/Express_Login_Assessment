@@ -38,7 +38,7 @@ app.get("/", function (req, res) {
     res.redirect("/user");
   } else {
   //Render index.mustache file
-  res.render("index");
+  res.redirect("/login");
 }
 });
 
@@ -75,6 +75,7 @@ users.forEach(function(user){
 
 
   req.session.username = req.body.username;
+  req.session.password =req.body.password;
 
   res.redirect("/user");
 }
@@ -84,7 +85,7 @@ users.forEach(function(user){
 
 
 app.get("/user", function(req, res){
-  res.render("user", {username: req.session.username, password:req.session.password});
+  res.render("users", {username: req.session.username, password:req.session.password});
 });
 
 
