@@ -35,7 +35,7 @@ let messages = [];
 // "/" endpoint
 app.get("/", function (req, res) {
   if (req.session.username){
-    res.redirect("/user");
+      res.render("users", {username: req.session.username, password:req.session.password});
   } else {
   //Render index.mustache file
   res.redirect("/login");
@@ -60,33 +60,29 @@ users.forEach(function(user){
   }
 });
 
-  req.checkBody("username", "Please Enter a valid username.").notEmpty();
-  req.checkBody("password", "Please Enter a Password.").notEmpty();
-  req.checkBody("password", "Invalid password and username combination ").equals(loggedUser.password);
+    req.checkBody("username", "Please Enter a valid username.").notEmpty();
+    req.checkBody("password", "Please Enter a Password.").notEmpty();
+    req.checkBody("password", "Invalid password and username combination ").equals(loggedUser.password);
 
-  let errors = req.validationErrors();
+    let errors = req.validationErrors();
 
-  if (errors){
-    errors.forEach(function(error){
-      messages.push(error.msg);
+    if (errors){
+      errors.forEach(function(error){
+        messages.push(error.msg);
+      });
+      res.render("login", {errors:messages});
+    } else{
+
+
+      req.session.username = req.body.username;
+      req.session.password =req.body.password;
+
+      res.redirect("/");
+      }
     });
-    res.render("login", {errors:messages});
-  } else{
 
 
-  req.session.username = req.body.username;
-  req.session.password =req.body.password;
 
-  res.redirect("/user");
-}
-
-  res.redirect("/user");
-});
-
-
-app.get("/user", function(req, res){
-  res.render("users", {username: req.session.username, password:req.session.password});
-});
 
 
 app.listen(3001, function(){
